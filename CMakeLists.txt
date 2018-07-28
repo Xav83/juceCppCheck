@@ -1,4 +1,37 @@
 
 project(juceCppCheck)
 
-add_subdirectory(cppcheck-1.84)
+set(JUCE_ROOT ${PROJECT_SOURCE_DIR}/JUCE-5.3.2)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
+## CppCheck generation
+
+set(CPPCHECK_BINARY ${PROJECT_SOURCE_DIR}/cppcheck-1.84/build/bin/cppcheck)
+
+add_custom_command(
+    COMMAND mkdir -p build && cd build && cmake .. && cmake --build .
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/cppcheck-1.84
+    OUTPUT ${CPPCHECK_BINARY}
+    COMMENT "Generating cppcheck ..."
+)
+
+## Run cpp check
+
+set(CPPCHECK_CFG_FILES ${PROJECT_SOURCE_DIR}/cppcheck-1.84/cfg/std.cfg)
+set(CPPCHECK_CLANG_DEBUG -DDEBUG -D__clang__ -D__clang_major__=4 -D__APPLE_CPP__ -DMAC_OS_X_VERSION_10_6)
+
+add_custom_command(
+    COMMAND ${CPPCHECK_BINARY} --language=c++ --std=c++11 --suppress=missingIncludeSystem ${CPPCHECK_CLANG_DEBUG} --enable=all -I ${JUCE_ROOT}/modules ${JUCE_ROOT}/extras/AudioPerformanceTest/Source
+    WORKING_DIRECTORY .
+    OUTPUT cppcheckResult
+    COMMENT "Generating Run CppCheck ..."
+    DEPENDS ${CPPCHECK_BINARY}
+)
+
+add_custom_target(
+    RunCppCheck ALL
+    DEPENDS cppcheckResult
+)
