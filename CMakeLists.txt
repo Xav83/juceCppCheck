@@ -20,11 +20,10 @@ add_custom_command(
 
 ## Run cpp check
 
-set(CPPCHECK_CFG_FILES ${PROJECT_SOURCE_DIR}/cppcheck-1.84/cfg/std.cfg)
 set(CPPCHECK_CLANG_DEBUG -DDEBUG -D__clang__ -D__clang_major__=4 -D__APPLE_CPP__ -DMAC_OS_X_VERSION_10_6)
 
 add_custom_command(
-    COMMAND ${CPPCHECK_BINARY} --language=c++ --std=c++11 --suppress=missingIncludeSystem ${CPPCHECK_CLANG_DEBUG} --enable=all -I ${JUCE_ROOT}/modules ${JUCE_ROOT}/extras/AudioPerformanceTest/Source
+    COMMAND ${CPPCHECK_BINARY} --language=c++ --suppress=missingIncludeSystem ${CPPCHECK_CLANG_DEBUG} --enable=all -I ${JUCE_ROOT}/modules ${JUCE_ROOT}/extras/AudioPerformanceTest/Source
     WORKING_DIRECTORY .
     OUTPUT cppcheckResult
     COMMENT "Generating Run CppCheck ..."

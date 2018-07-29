@@ -1,0 +1,10 @@
+os: osx
+language: cpp
+
+script:
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir /usr/local/share/CppCheck
+  - cp cppcheck-1.84/cfg/std.cfg /usr/local/share/CppCheck
+  - mkdir build && cd build
+  - cmake ..
+  - cmake --build .
