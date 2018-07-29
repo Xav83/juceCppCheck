@@ -2,21 +2,21 @@ include(CPackComponent)
 
 set(CPACK_PACKAGE_NAME "juceCppCheck")
 
-function(installCppCheckResult juceVersion)
-    INSTALL(FILES ${CMAKE_BINARY_DIR}/juce${juceVersion}_output.txt
+function(installCppCheckResult cppcheckOutputsTarget)
+    INSTALL(FILES ${CMAKE_BINARY_DIR}/${cppcheckOutputsTarget}_output.txt
         DESTINATION .
-        COMPONENT juce${juceVersion}_Component
+        COMPONENT ${cppcheckOutputsTarget}_Component
     )
-    list(APPEND CPACK_COMPONENTS_ALL juce${juceVersion}_Component)
+    list(APPEND CPACK_COMPONENTS_ALL ${cppcheckOutputsTarget}_Component)
 endfunction(installCppCheckResult)
 
 if (APPLE)
     set(CPACK_SYSTEM_NAME "Darwin")
     set(CPACK_GENERATOR "ZIP")
 
-    foreach(juceVersion ${JUCE_VERSION})
-        installCppCheckResult(${juceVersion})
-    endforeach(juceVersion)
+    foreach(cppcheckOutputsTarget ${cppcheckOutputsTargets})
+        installCppCheckResult(${cppcheckOutputsTarget})
+    endforeach(cppcheckOutputsTarget)
 endif(APPLE)
 
 include(CPack)

@@ -37,7 +37,6 @@ set(CPPCHECK_CLANG_DEBUG -DDEBUG -D__clang__ -D__clang_major__=4 -D__APPLE_CPP__
 function(createCppCheckCustomCommand juceVersion)
     set(JUCE_ROOT ${PROJECT_SOURCE_DIR}/JUCEs/JUCE-${juceVersion})
     set(CPPCHECK_OUTPUT_FILE juce${juceVersion}_output.txt)
- 
     add_custom_command(
         COMMAND ${CPPCHECK_BINARY} --language=c++ --output-file=${CPPCHECK_OUTPUT_FILE} --suppress=missingIncludeSystem ${CPPCHECK_CLANG_DEBUG} --enable=all -I ${JUCE_ROOT}/modules ${JUCE_ROOT}/extras/AudioPerformanceTest/Source
         WORKING_DIRECTORY .
@@ -45,11 +44,11 @@ function(createCppCheckCustomCommand juceVersion)
         COMMENT "Generating Run CppCheck ..."
         DEPENDS ${CPPCHECK_BINARY}
     )
-
     add_custom_target(
         juce${juceVersion} ALL
         DEPENDS ${CPPCHECK_OUTPUT_FILE}
     )
+    list(APPEND cppcheckOutputsTargets juce${juceVersion})
 endfunction(createCppCheckCustomCommand)
 
 foreach(juceVersion ${JUCE_VERSION})
@@ -57,10 +56,5 @@ foreach(juceVersion ${JUCE_VERSION})
 endforeach(juceVersion)
 
 add_dependencies(jucedevelop JUCE_Develop)
-
-add_custom_target(
-    RunCppCheck ALL
-    DEPENDS juce5.3.2 jucedevelop
-)
 
 include(Packaging.cmake)
