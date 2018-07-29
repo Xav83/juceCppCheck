@@ -62,3 +62,5 @@ add_custom_target(
     RunCppCheck ALL
     DEPENDS juce5.3.2 jucedevelop
 )
+
+include(Packaging.cmake)
