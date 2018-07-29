@@ -29,10 +29,16 @@ function(createCppCheckCustomCommand juceVersion)
     add_custom_command(
         COMMAND ${CPPCHECK_BINARY} --language=c++ --suppress=missingIncludeSystem ${CPPCHECK_CLANG_DEBUG} --enable=all -I ${JUCE_ROOT}/modules ${JUCE_ROOT}/extras/AudioPerformanceTest/Source
         WORKING_DIRECTORY .
-        OUTPUT juce${juceVersion}
+        OUTPUT juce${juceVersion}_output
         COMMENT "Generating Run CppCheck ..."
         DEPENDS ${CPPCHECK_BINARY}
     )
+
+    add_custom_target(
+        juce${juceVersion} ALL
+        DEPENDS juce${juceVersion}_output
+)
+
 endfunction(createCppCheckCustomCommand)
 
 foreach(juceVersion ${JUCE_VERSION})
