@@ -1,10 +1,16 @@
 os: osx
 language: cpp
 
+env:
+  - JUCE_VERSION=5.3.2
+  - JUCE_VERSION=develop
+
+install:
+  - mkdir -p /usr/local/share/CppCheck
+  - cp ${TRAVIS_BUILD_DIR}/cppcheck-1.84/cfg/std.cfg /usr/local/share/CppCheck
+
 script:
-  - cd ${TRAVIS_BUILD_DIR}
-  - mkdir /usr/local/share/CppCheck
-  - cp cppcheck-1.84/cfg/std.cfg /usr/local/share/CppCheck
-  - mkdir build && cd build
+  - mkdir -p ${TRAVIS_BUILD_DIR}/build
+  - cd ${TRAVIS_BUILD_DIR}/build
   - cmake ..
-  - cmake --build .
+  - cmake --build . --target juce$JUCE_VERSION
