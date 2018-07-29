@@ -1,7 +1,8 @@
 
 project(juceCppCheck)
 
-set(JUCE_ROOT ${PROJECT_SOURCE_DIR}/JUCEs/JUCE-5.3.2)
+list(APPEND JUCE_VERSION "5.3.2")
+list(APPEND JUCE_VERSION "develop")
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
@@ -22,15 +23,22 @@ add_custom_command(
 
 set(CPPCHECK_CLANG_DEBUG -DDEBUG -D__clang__ -D__clang_major__=4 -D__APPLE_CPP__ -DMAC_OS_X_VERSION_10_6)
 
-add_custom_command(
-    COMMAND ${CPPCHECK_BINARY} --language=c++ --suppress=missingIncludeSystem ${CPPCHECK_CLANG_DEBUG} --enable=all -I ${JUCE_ROOT}/modules ${JUCE_ROOT}/extras/AudioPerformanceTest/Source
-    WORKING_DIRECTORY .
-    OUTPUT cppcheckResult
-    COMMENT "Generating Run CppCheck ..."
-    DEPENDS ${CPPCHECK_BINARY}
-)
+function(createCppCheckCustomCommand juceVersion)
+    set(JUCE_ROOT ${PROJECT_SOURCE_DIR}/JUCEs/JUCE-${juceVersion})
+
+    add_custom_command(
+        COMMAND ${CPPCHECK_BINARY} --language=c++ --suppress=missingIncludeSystem ${CPPCHECK_CLANG_DEBUG} --enable=all -I ${JUCE_ROOT}/modules ${JUCE_ROOT}/extras/AudioPerformanceTest/Source
+        WORKING_DIRECTORY .
+        OUTPUT juce${juceVersion}
+        COMMENT "Generating Run CppCheck ..."
+        DEPENDS ${CPPCHECK_BINARY}
+    )
+endfunction(createCppCheckCustomCommand)
+
+createCppCheckCustomCommand(5.3.2)
+createCppCheckCustomCommand(develop)
 
 add_custom_target(
     RunCppCheck ALL
-    DEPENDS cppcheckResult
+    DEPENDS juce5.3.2 jucedevelop
 )
