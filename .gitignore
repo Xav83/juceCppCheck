@@ -1,4 +1,4 @@
 build
 .DS_Store
 
-JUCE-5.3.2/extras/AudioPerformanceTest/CMakeLists.txt
+JUCEs/JUCE-develop

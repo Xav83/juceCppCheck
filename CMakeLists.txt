@@ -19,6 +19,17 @@ add_custom_command(
     COMMENT "Generating cppcheck ..."
 )
 
+include(ExternalProject)
+ExternalProject_Add(JUCE_Develop
+  GIT_REPOSITORY "https://github.com/WeAreROLI/JUCE.git"
+  GIT_TAG "origin/develop"
+  SOURCE_DIR "${PROJECT_SOURCE_DIR}/JUCEs/JUCE-develop"
+
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+)
+
 ## Run cpp check
 
 set(CPPCHECK_CLANG_DEBUG -DDEBUG -D__clang__ -D__clang_major__=4 -D__APPLE_CPP__ -DMAC_OS_X_VERSION_10_6)
@@ -37,13 +48,14 @@ function(createCppCheckCustomCommand juceVersion)
     add_custom_target(
         juce${juceVersion} ALL
         DEPENDS juce${juceVersion}_output
-)
-
+    )
 endfunction(createCppCheckCustomCommand)
 
 foreach(juceVersion ${JUCE_VERSION})
     createCppCheckCustomCommand(${juceVersion})
 endforeach(juceVersion)
+
+add_dependencies(jucedevelop JUCE_Develop)
 
 add_custom_target(
     RunCppCheck ALL
