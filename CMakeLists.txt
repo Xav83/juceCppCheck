@@ -1,7 +1,7 @@
 
 project(juceCppCheck)
 
-set(JUCE_ROOT ${PROJECT_SOURCE_DIR}/JUCE-5.3.2)
+set(JUCE_ROOT ${PROJECT_SOURCE_DIR}/JUCEs/JUCE-5.3.2)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
