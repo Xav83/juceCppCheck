@@ -35,8 +35,9 @@ function(createCppCheckCustomCommand juceVersion)
     )
 endfunction(createCppCheckCustomCommand)
 
-createCppCheckCustomCommand(5.3.2)
-createCppCheckCustomCommand(develop)
+foreach(juceVersion ${JUCE_VERSION})
+    createCppCheckCustomCommand(${juceVersion})
+endforeach(juceVersion)
 
 add_custom_target(
     RunCppCheck ALL
